@@ -28,7 +28,7 @@ $sales = find_all_sale();
             <span>All Sales</span>
           </strong>
           <div class="pull-right">
-            <a href="add_sale.php" class="btn btn-primary">Add sale</a>
+            <a href="pos.php" class="btn btn-primary">Add sale</a>
           </div>
         </div>
         <div class="panel-body">

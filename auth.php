@@ -13,6 +13,7 @@ if(empty($errors)){
     //Update Sign in time
      updateLastLogIn($user_id);
      $session->msg("s", "Welcome to Inventory Management System");
+    insert_logs($username, 'Login', date('Y-m-d H:i:s'));
      redirect('admin.php',false);
 
   } else {

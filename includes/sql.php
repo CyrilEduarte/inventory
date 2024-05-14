@@ -380,3 +380,32 @@ function  monthlySales($year)
   $sql .= " ORDER BY date_format(s.date, '%c' ) ASC";
   return find_by_sql($sql);
 }
+/*--------------------------------------------------------------*/
+/* Function for Joining ingredient table with categories and media */
+/*--------------------------------------------------------------*/
+function join_ingredient_table() {
+  global $db;
+  $sql  = "SELECT ri.ingredient_id AS ingredient_id, ri.ingredient_name AS ingredient_name, ri.stock_quantity AS stock_quantity, ";
+  $sql .= "ri.purchase_price AS purchase_price, ri.sale_price AS sale_price, ri.date_added AS date_added, ";
+  $sql .= "ri.expiry AS expiry, ri.supplier AS supplier, "; // Include expiry and supplier columns
+  $sql .= "cat.name AS category, ";
+  $sql .= "IFNULL(media.file_name, 'no_image.png') AS image, ri.media_id ";
+  $sql .= "FROM raw_ingredients ri ";
+  $sql .= "LEFT JOIN categories cat ON ri.category_id = cat.id ";
+  $sql .= "LEFT JOIN media ON ri.media_id = media.id ";
+  $sql .= "ORDER BY ri.ingredient_id ASC"; // Change ri.id to ri.ingredient_id
+  return find_by_sql($sql);
+}
+function logActivity($userId, $activityType, $activityDescription, $conn) {
+    $stmt = $conn->prepare("INSERT INTO activity_log (user_id, activity_type, activity_description) VALUES (?, ?, ?)");
+    $stmt->bind_param("iss", $userId, $activityType, $activityDescription);
+    $stmt->execute();
+    $stmt->close();
+}
+// Function to insert logs into the database
+function insert_logs($session_id, $data, $created_at) {
+  global $db;
+  $query = "INSERT INTO session_logs (session_id, data, created_at) VALUES ('{$session_id}', '{$data}', '{$created_at}')";
+  return $db->query($query);
+}
+?>

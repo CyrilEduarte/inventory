@@ -3,7 +3,10 @@ $page_title = 'Admin Home Page';
 require_once('includes/load.php');
 // Checkin What level user has permission to view this page
 page_require_level(1);
+
 ?>
+
+
 <?php
 $c_categorie     = count_by_id('categories');
 $c_product       = count_by_id('products');
@@ -18,6 +21,9 @@ $recent_sales    = find_recent_sale_added('5')
   .admin {
     background-color: #35404d;
     border-radius: 8px;
+  }
+  .panel-box {
+    height: auto !important;
   }
 </style>
 <div class="row">
@@ -195,6 +201,32 @@ $recent_sales    = find_recent_sale_added('5')
 <div class="row">
 
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+<script>
+$(document).ready(function(){
+    // AJAX call to fetch data from the PHP file
+    $.ajax({
+        url: "check_quantity.php",
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            // Check if there are low stock items
+            if(response.length > 0) {
+                // Show Toastr notification for each low stock item
+                $.each(response, function(index, item) {
+                    toastr.warning(item + " is low in stock!");
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
+    });
+});
+</script>
 
 
 

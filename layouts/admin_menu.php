@@ -25,11 +25,11 @@
   <li class="products">
     <a href="#" class="submenu-toggle">
       <i class="glyphicon glyphicon-th-large"></i>
-      <span>Products</span>
+      <span>Inventory</span>
     </a>
     <ul class="nav submenu">
        <li><a href="product.php">Manage Products</a> </li>
-       <li><a href="add_product.php">Add Products</a> </li>
+       <li><a href="ingredients.php">Manage Raw Materials</a> </li>
    </ul>
   </li>
   <li class="pictures">
@@ -39,14 +39,11 @@
     </a>
   </li>
   <li class="sales">
-    <a href="#" class="submenu-toggle">
+    <a href="sales.php" >
       <i class="glyphicon glyphicon-credit-card"></i>
-       <span>Sales</span>
-      </a>
-      <ul class="nav submenu">
-         <li><a href="sales.php">Manage Sales</a> </li>
-         <li><a href="add_sale.php">Add Sale</a> </li>
-     </ul>
+      <span>Sales
+      </span>
+    </a>
   </li>
   <li class="salesreport">
     <a href="#" class="submenu-toggle">
@@ -63,6 +60,12 @@
     <a href="pos.php" >
     <i class="glyphicon glyphicon-th"></i>
       <span>Point of Sale System</span>
+    </a>
+  </li>
+  <li class="logs">
+    <a href="logs.php" >
+    <i class="fa-regular fa-clipboard"></i>
+      <span>User Activities</span>
     </a>
   </li>
 </ul>
