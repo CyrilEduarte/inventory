@@ -6,6 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['cartItems']) && !empty($_POST['cartItems'])) {
         // Process cart items
         $cartItems = $_POST['cartItems'];
+        $paymentMethod = $_POST['paymentMethod'];
 
         // Establish connection to the database
         $servername = "localhost";
@@ -38,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmtUpdate->close();
             break;
         }
-
         // Insert order details into orders table if all product updates were successful
         if ($success) {
             foreach ($cartItems as $item) {
@@ -47,9 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $price = $conn->real_escape_string($item['price']); // Sanitize user input
 
                 // Insert order details into sales table using prepared statement
-                $sqlInsert = "INSERT INTO sales (product_id, qty, price) VALUES (?, ?, ?)";
+                $sqlInsert = "INSERT INTO sales (product_id, qty, price, payment_method) VALUES (?, ?, ?, ?)";
                 $stmtInsert = $conn->prepare($sqlInsert);
-                $stmtInsert->bind_param("iii", $productId, $quantity, $price);
+                $stmtInsert->bind_param("iiis", $productId, $quantity, $price, $paymentMethod);
                 if ($stmtInsert->execute() !== TRUE) {
                     echo "Error inserting record: " . $conn->error;
                     $success = false;
@@ -75,4 +75,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Invalid request method
     echo "Invalid request method.";
 }
-?>

@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    
     // // Function to load cart items from sessionStorage
     // function loadCartFromSessionStorage() {
     //     var cartItems = sessionStorage.getItem('cartItems');
@@ -194,11 +195,13 @@ $(document).ready(function () {
             cartItems.push({ productId: productId, quantity: quantity, price: price });
         });
 
+        var paymentMethod = $('#paymentMethod').val(); // Get selected payment method
+
         // AJAX call to insert cart items into database and update quantities
         $.ajax({
             url: 'confirm_order.php', // Update with your endpoint for confirming orders
             type: 'POST',
-            data: { cartItems: cartItems },
+            data: { cartItems: cartItems, paymentMethod: paymentMethod },
             success: function (response) {
                 // Clear cart and session storage upon successful order confirmation
                 $('#cart').html('');
@@ -231,4 +234,66 @@ $(document).ready(function () {
             }
         });
     });
+// Define the printCart function
+function printCart() {
+    // Open a new tab
+    var printWindow = window.open('', '_blank');
+    
+    // Random address and contact number
+    var address = "New Lancaster City, Cavite, Philippines";
+    var contactNumber = "+63 999 999 9999";
+
+    // Generate the content to print
+    var contentToPrint = '<h1 style="text-align: center;">Scarlett\'s Munchie Delight</h1>'; // Letterhead
+    contentToPrint += '<p style="text-align: center;">' + address + '<br>' + contactNumber + '</p>'; // Address and contact number
+    contentToPrint += '<table style="width:100%; border-collapse: collapse; border: 1px solid black;">'; // Start of table
+    contentToPrint += '<tr><th style="border: 1px solid black; padding: 8px;">Product Name</th><th style="border: 1px solid black; padding: 8px;">Quantity</th><th style="border: 1px solid black; padding: 8px;">Price</th></tr>'; // Table header
+
+    var totalSum = 0; // Initialize total sum
+    
+    // Loop through each cart item in the cartModal and add it to the table
+    $('#cartModal .cart-item').each(function () {
+        var productName = $(this).find('.cart-item-name').text();
+        var quantity = $(this).find('.cart-item-qty').text();
+        var price = parseFloat($(this).find('.cart-item-price').text().replace('$', '')); // Parse price to float
+        
+        totalSum += price; // Add price to total sum
+        
+        contentToPrint += '<tr>';
+        contentToPrint += '<td style="border: 1px solid black; padding: 8px;">' + productName + '</td>';
+        contentToPrint += '<td style="border: 1px solid black; padding: 8px;">' + quantity + '</td>';
+        contentToPrint += '<td style="border: 1px solid black; padding: 8px;">$' + price.toFixed(2) + '</td>';
+        contentToPrint += '</tr>';
+    });
+
+    contentToPrint += '</table>'; // End of table
+    
+    // Add total sum below the table
+    contentToPrint += '<h3 style="text-align: right; margin-top: 20px;">Total: Php' + totalSum.toFixed(2) + '</h3>';
+    
+    // Write the content to the print window
+    printWindow.document.open();
+    printWindow.document.write('<html><head><title>Print Cart</title></head><body>');
+    printWindow.document.write(contentToPrint);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    
+    // Print the content
+    printWindow.print();
+}
+
+// Add a click event listener to the print button
+$('#printCartBtn').unbind('click').click(function () {
+    printCart();
+});
+
+
+// Add a click event listener to the print button
+$('#printCartBtn').unbind('click').click(function () {
+    printCart();
+});
+
+
+
+
 });

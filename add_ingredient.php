@@ -5,10 +5,11 @@
   page_require_level(2);
   $all_categories = find_all('categories');
   $all_photo = find_all('media');
+  $username = $_SESSION['username'];
 ?>
 <?php
  if(isset($_POST['add_ingredient'])){
-   $req_fields = array('ingredient-title','ingredient-category','ingredient-quantity','purchase-price', 'sale-price', 'expiry', 'supplier');
+   $req_fields = array('ingredient-title','ingredient-category','ingredient-quantity','purchase-price', 'sale-price', 'expiry', 'supplier', 'ingredient-unit');
    validate_fields($req_fields);
    if(empty($errors)){
      $i_name  = remove_junk($db->escape($_POST['ingredient-title']));
@@ -16,8 +17,9 @@
      $i_qty   = remove_junk($db->escape($_POST['ingredient-quantity']));
      $i_buy   = remove_junk($db->escape($_POST['purchase-price']));
      $i_sale  = remove_junk($db->escape($_POST['sale-price']));
-     $expiry  = remove_junk($db->escape($_POST['expiry'])); // Add expiry
-     $supplier = remove_junk($db->escape($_POST['supplier'])); // Add supplier
+     $expiry  = remove_junk($db->escape($_POST['expiry']));
+     $supplier = remove_junk($db->escape($_POST['supplier']));
+     $i_unit  = remove_junk($db->escape($_POST['ingredient-unit']));
 
      if (is_null($_POST['ingredient-photo']) || $_POST['ingredient-photo'] === "") {
        $media_id = '0';
@@ -26,14 +28,14 @@
      }
      $date    = make_date();
      $query  = "INSERT INTO raw_ingredients (";
-     $query .=" ingredient_name,stock_quantity,purchase_price,sale_price,category_id,media_id,date_added,expiry,supplier"; // Include expiry and supplier
+     $query .=" ingredient_name,stock_quantity,unit,purchase_price,sale_price,category_id,media_id,date_added,expiry,supplier";
      $query .=") VALUES (";
-     $query .=" '{$i_name}', '{$i_qty}', '{$i_buy}', '{$i_sale}', '{$i_cat}', '{$media_id}', '{$date}', '{$expiry}', '{$supplier}'"; // Add expiry and supplier
+     $query .=" '{$i_name}', '{$i_qty}', '{$i_unit}', '{$i_buy}', '{$i_sale}', '{$i_cat}', '{$media_id}', '{$date}', '{$expiry}', '{$supplier}'";
      $query .=")";
      $query .=" ON DUPLICATE KEY UPDATE ingredient_name='{$i_name}'";
      if($db->query($query)){
        $session->msg('s',"Ingredient added ");
-       insert_logs(ucfirst($user['name']), 'Added an Ingredient', date('Y-m-d H:i:s'));
+       insert_logs($username, 'Added an Ingredient', date('Y-m-d H:i:s'));
        redirect('add_ingredient.php', false);
      } else {
        $session->msg('d',' Sorry failed to add!');
@@ -99,7 +101,7 @@
 
               <div class="form-group">
                <div class="row">
-                 <div class="col-md-4">
+                 <div class="col-md-3">
                    <div class="input-group">
                      <span class="input-group-addon">
                       <i class="glyphicon glyphicon-shopping-cart"></i>
@@ -107,24 +109,34 @@
                      <input type="number" class="form-control" name="ingredient-quantity" placeholder="Stock Quantity">
                   </div>
                  </div>
-                 <div class="col-md-4">
+                 <div class="col-md-3">
+                   <select class="form-control" name="ingredient-unit">
+                     <option value="">Select Unit</option>
+                     <option value="mg">mg</option>
+                     <option value="kg">kg</option>
+                     <option value="liter">liter</option>
+                     <option value="milliliter">milliliter</option>
+                     <option value="milliliter">pcs</option>
+                   </select>
+                 </div>
+                 <div class="col-md-3">
                    <div class="input-group">
                      <span class="input-group-addon">
                        <i class="fa-solid fa-peso-sign"></i>
                      </span>
-                     <input type="number" class="form-control" name="purchase-price" placeholder="Purchase Price">
+                     <input type="number" class="form-control" name="purchase-price" placeholder="Cost" value="0">
                      <span class="input-group-addon">.00</span>
                   </div>
                  </div>
-                  <div class="col-md-4">
+                  <!-- <div class="col-md-3">
                     <div class="input-group">
                       <span class="input-group-addon">
                         <i class="fa-solid fa-peso-sign"></i>
                       </span>
-                      <input type="number" class="form-control" name="sale-price" placeholder="Sale Price">
+                      <input type="number" class="form-control" name="sale-price" placeholder="Sale Price" value="0">
                       <span class="input-group-addon">.00</span>
                    </div>
-                  </div>
+                  </div> -->
                </div>
               </div>
 

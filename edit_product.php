@@ -3,6 +3,8 @@ $page_title = 'Edit product';
 require_once('includes/load.php');
 // Checkin What level user has permission to view this page
 page_require_level(2);
+session_start();
+$username = $_SESSION['username'];
 ?>
 <?php
 $product = find_by_id('products', (int)$_GET['id']);
@@ -36,7 +38,7 @@ if (isset($_POST['product'])) {
     $result = $db->query($query);
     if ($result && $db->affected_rows() === 1) {
       $session->msg('s', "Product updated ");
-      $insert_log = insert_logs(ucfirst($user['name']), 'Edited a Product', date('Y-m-d H:i:s'));
+      $insert_log = insert_logs($username, 'Edited a Product', date('Y-m-d H:i:s'));
       redirect('product.php', false);
     } else {
       $session->msg('d', ' Sorry failed to updated!');

@@ -1,12 +1,11 @@
 <?php
 $page_title = 'Admin Home Page';
 require_once('includes/load.php');
+
 // Checkin What level user has permission to view this page
 page_require_level(1);
 
 ?>
-
-
 <?php
 $c_categorie     = count_by_id('categories');
 $c_product       = count_by_id('products');
@@ -88,6 +87,101 @@ $recent_sales    = find_recent_sale_added('5')
     </div>
   </a>
 </div>
+
+
+<div class="row">
+  <!-- Product Stocks Panel -->
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>
+          <span class="glyphicon glyphicon-th"></span>
+          <span>Product Stocks</span>
+        </strong>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped table-bordered table-condensed">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Total Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($products_sold as $product_sold) : ?>
+              <tr>
+                <td><?php echo remove_junk(first_character($product_sold['name'])); ?></td>
+                <td><?php echo (int)$product_sold['totalQty']; ?></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<!-- Raw Ingredients Stocks and Expiry Panel -->
+<div class="col-md-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <strong>
+        <span class="glyphicon glyphicon-th"></span>
+        <span>Raw Ingredients Stocks and Expiry</span>
+      </strong>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Total Quantity</th>
+            <th>Expiry</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+            // Connect to your database
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "scinventory_system";
+
+            $conn = new mysqli($servername, $username, $password, $dbname);
+
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            // Fetch data from the database
+            $sql = "SELECT ingredient_name, stock_quantity, expiry FROM raw_ingredients";
+            $result = $conn->query($sql);
+
+            // Display data in the table
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . $row["ingredient_name"] . "</td>";
+                    echo "<td>" . $row["stock_quantity"] . "</td>";
+                    echo "<td>" . $row["expiry"] . "</td>";
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='2'>No raw ingredients found</td></tr>";
+            }
+
+            // Close the connection
+            $conn->close();
+          ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+
 <!-- Chart -->
 <div class="row">
     <?php
@@ -218,6 +312,28 @@ $(document).ready(function(){
                 // Show Toastr notification for each low stock item
                 $.each(response, function(index, item) {
                     toastr.warning(item + " is low in stock!");
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error);
+        }
+    });
+});
+</script>
+<script>
+$(document).ready(function(){
+    // AJAX call to fetch data from the PHP file
+    $.ajax({
+        url: "check_expiry.php",
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            // Check if there are items expiring within 7 days
+            if(response.length > 0) {
+                // Show Toastr notification for each item
+                $.each(response, function(index, item) {
+                    toastr.error(item + " is expiring within 7 days!");
                 });
             }
         },

@@ -11,7 +11,7 @@ require_once('includes/load.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Point of Sale</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <style>
@@ -158,6 +158,7 @@ require_once('includes/load.php');
         </div>
     </div>
     <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -170,6 +171,15 @@ require_once('includes/load.php');
                     <div id="confirmedCartItems">
                         <!-- Display confirmed items here -->
                     </div>
+                    <div class="form-group">
+                        <label for="paymentMethod">Select Payment Method</label>
+                        <select class="form-control" id="paymentMethod">
+                            <option value="cash">Cash</option>
+                            <option value="online">Online Payment</option>
+                        </select>
+                        
+                    </div>
+                    <button class="btn btn-primary" id="printCartBtn">Print Receipt</button>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cancelOrderModalBtn" data-dismiss="modal">Cancel</button>
@@ -178,14 +188,14 @@ require_once('includes/load.php');
             </div>
         </div>
     </div>
-
-
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="pos.js"></script>
-    <script></script>
+
+
+
 </body>
 
 </html>

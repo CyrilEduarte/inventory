@@ -5,6 +5,7 @@
   page_require_level(2);
   $all_categories = find_all('categories');
   $all_photo = find_all('media');
+$username = $_SESSION['username'];
 ?>
 <?php
  if(isset($_POST['add_product'])){
@@ -30,7 +31,7 @@
      $query .=" ON DUPLICATE KEY UPDATE name='{$p_name}'";
      if($db->query($query)){
        $session->msg('s',"Product added ");
-       $insert_log = insert_logs(ucfirst($user['name']), 'Added a Product', date('Y-m-d H:i:s'));
+       $insert_log = insert_logs($username, 'Added a Product', date('Y-m-d H:i:s'));
        redirect('add_product.php', false);
      } else {
        $session->msg('d',' Sorry failed to added!');

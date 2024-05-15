@@ -3,7 +3,7 @@
   require_once('includes/load.php');
   // Checkin What level user has permission to view this page
   page_require_level(2);
-  $ingredients = join_ingredient_table(); // You need to implement this function in your codebase
+  $ingredients = join_ingredient_table(); // Ensure this function includes the 'unit' column
 ?>
 <style>
   .ingredients {
@@ -35,8 +35,9 @@
               <th> Ingredient Name </th>
               <th class="text-center" style="width: 10%;"> Category </th>
               <th class="text-center" style="width: 10%;"> In-Stock </th>
-              <th class="text-center" style="width: 10%;"> Purchase Price </th>
-              <th class="text-center" style="width: 10%;"> Sale Price </th>
+              <th class="text-center" style="width: 10%;"> Unit </th> <!-- Unit Column -->
+              <th class="text-center" style="width: 10%;"> Cost</th>
+              <!-- <th class="text-center" style="width: 10%;"> Sale Price </th> -->
               <th class="text-center" style="width: 10%;"> Date Added </th>
               <th class="text-center" style="width: 10%;"> Expiry </th>
               <th class="text-center" style="width: 10%;"> Supplier </th>
@@ -57,8 +58,9 @@
                 <td> <?php echo remove_junk($ingredient['ingredient_name']); ?></td>
                 <td class="text-center"> <?php echo remove_junk($ingredient['category']); ?></td>
                 <td class="text-center"> <?php echo remove_junk($ingredient['stock_quantity']); ?></td>
+                <td class="text-center"> <?php echo remove_junk($ingredient['unit']); ?></td>
                 <td class="text-center"> <?php echo remove_junk($ingredient['purchase_price']); ?></td>
-                <td class="text-center"> <?php echo remove_junk($ingredient['sale_price']); ?></td>
+                <!-- <td class="text-center"> <?php //echo remove_junk($ingredient['sale_price']); ?></td> -->
                 <td class="text-center"> <?php echo read_date($ingredient['date_added']); ?></td>
                 <td class="text-center"> <?php echo read_date($ingredient['expiry']); ?></td>
                 <td class="text-center"> <?php echo remove_junk($ingredient['supplier']); ?></td>

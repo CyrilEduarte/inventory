@@ -386,7 +386,7 @@ function  monthlySales($year)
 function join_ingredient_table() {
   global $db;
   $sql  = "SELECT ri.ingredient_id AS ingredient_id, ri.ingredient_name AS ingredient_name, ri.stock_quantity AS stock_quantity, ";
-  $sql .= "ri.purchase_price AS purchase_price, ri.sale_price AS sale_price, ri.date_added AS date_added, ";
+  $sql .= "ri.unit AS unit, ri.purchase_price AS purchase_price, ri.sale_price AS sale_price, ri.date_added AS date_added, ";
   $sql .= "ri.expiry AS expiry, ri.supplier AS supplier, "; // Include expiry and supplier columns
   $sql .= "cat.name AS category, ";
   $sql .= "IFNULL(media.file_name, 'no_image.png') AS image, ri.media_id ";

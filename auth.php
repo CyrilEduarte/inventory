@@ -8,6 +8,11 @@ $password = remove_junk($_POST['password']);
 if(empty($errors)){
   $user_id = authenticate($username, $password);
   if($user_id){
+     // Start session
+     session_start();
+
+     // Store username in session variable
+     $_SESSION['username'] = $username;
     //create session with id
      $session->login($user_id);
     //Update Sign in time
